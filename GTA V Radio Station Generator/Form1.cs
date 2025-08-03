@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using TagLib.Mpeg;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace GTA_V_Radio_Station_Generator
 {
@@ -86,19 +85,41 @@ namespace GTA_V_Radio_Station_Generator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = "C:\\Users";
-            dialog.IsFolderPicker = true;
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                RadioStationsGenerator = new RadioStationsGenerator();
-                RadioStationsGenerator.GetListOfStations(dialog.FileName);
-                PopulateGrid();
-            }
-            else
-            {
 
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    string[] files = Directory.GetFiles(fbd.SelectedPath);
+                    string folderName = Directory.GetFiles(fbd.SelectedPath).FirstOrDefault();
+                    //System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+
+                    RadioStationsGenerator = new RadioStationsGenerator();
+                    RadioStationsGenerator.GetListOfStations(fbd.SelectedPath);
+                    PopulateGrid();
+
+
+                }
             }
+
+
+
+            //CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            //dialog.InitialDirectory = "C:\\Users";
+            //dialog.IsFolderPicker = true;
+            //if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            //{
+            //    RadioStationsGenerator = new RadioStationsGenerator();
+            //    RadioStationsGenerator.GetListOfStations(dialog.FileName);
+            //    PopulateGrid();
+            //}
+            //else
+            //{
+
+            //}
         }
         private void btnCreateStations_Click(object sender, EventArgs e)
         {
