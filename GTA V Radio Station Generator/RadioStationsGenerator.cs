@@ -20,7 +20,7 @@ public class RadioStationsGenerator
     {
     }
 
-    public void GetListOfStations(string stationFolderDirectory)
+    public void GetListOfStations(string stationFolderDirectory, List<RadioStation> StoredStations)
     {
 
         StationFolderDirectory = stationFolderDirectory;
@@ -33,7 +33,21 @@ public class RadioStationsGenerator
         {
             string stationName = Path.GetFileName(dir);// Path.GetDirectoryName(dir));
             string directory = dir;
-            RadioStationList.Add(new RadioStation(stationName, directory) { WheelPosition = currentWheelPosition });
+
+            RadioStation toMake = new RadioStation(stationName, directory) { WheelPosition = currentWheelPosition };
+
+            if (StoredStations != null)
+            {
+                RadioStation matchingStoredStation = StoredStations.FirstOrDefault(x => x.Name == stationName);
+                if (matchingStoredStation != null)
+                {
+                    toMake.WheelPosition = matchingStoredStation.WheelPosition;
+                    toMake.Genre = matchingStoredStation.Genre;
+                    toMake.Flags = matchingStoredStation.Flags;
+                    toMake.TextName = matchingStoredStation.TextName;
+                }
+            }
+            RadioStationList.Add(toMake);
             currentWheelPosition += WheelPositionIncrement;
         }
     }

@@ -6,12 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+using System.Xml.Serialization;
 
 
 public class RadioStation
 {
     private DirectoryInfo DirectoryInfo;
+
+
+    public RadioStation() { }
+
     public RadioStation(string name, string directory)
     {
         Name = name;
@@ -33,10 +37,12 @@ public class RadioStation
 
 
     public string Name { get; set; }
+
+    [XmlIgnore]
     public string Directory { get; set; }
 
 
-
+    [XmlIgnore]
     public List<RadioTrack> RadioTracks { get; set; }
     public string TextName { get; set; }
     public int WheelPosition { get; set; }

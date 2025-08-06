@@ -17,11 +17,24 @@ namespace GTA_V_Radio_Station_Generator
     public partial class Form1 : Form
     {
         private RadioStationsGenerator RadioStationsGenerator;
+        private List<RadioStation> StoredStations = new List<RadioStation>();
+        private string StoredStationsPath = $"StoredStations.xml";
 
         public Form1()
         {
             InitializeComponent();
             AddVanillaExample();
+            ReadStoredStations();
+        }
+
+        private void ReadStoredStations()
+        {
+            if (System.IO.File.Exists(StoredStationsPath))
+            {
+
+                StoredStations = Helper.DeserializeParams<RadioStation>(StoredStationsPath);
+            }
+
         }
 
         private void AddVanillaExample()
@@ -98,7 +111,7 @@ namespace GTA_V_Radio_Station_Generator
                     //System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
 
                     RadioStationsGenerator = new RadioStationsGenerator();
-                    RadioStationsGenerator.GetListOfStations(fbd.SelectedPath);
+                    RadioStationsGenerator.GetListOfStations(fbd.SelectedPath, StoredStations);
                     PopulateGrid();
 
 
@@ -128,6 +141,21 @@ namespace GTA_V_Radio_Station_Generator
                 return;
             }
             RadioStationsGenerator.Process(tbTrackID.Text);
+            WriteStationsToFile();
+        }
+        private void WriteStationsToFile()
+        {
+            List<RadioStation> toWrite = new List<RadioStation>();
+            toWrite.AddRange(RadioStationsGenerator.RadioStationList);
+            foreach(RadioStation stat in StoredStations)
+            {
+                if(!RadioStationsGenerator.RadioStationList.Any(x=> x.Name == stat.Name))
+                {
+                    toWrite.Add(stat);
+                }
+            }
+            Helper.SerializeParams(toWrite, StoredStationsPath);
+
         }
         private void PopulateGrid()
         {
@@ -141,13 +169,6 @@ namespace GTA_V_Radio_Station_Generator
             dgvRadioStations.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvRadioStations.AllowUserToDeleteRows = false;
             dgvRadioStations.Refresh();
-
-
-
-
-
         }
-
-
     }
 }
