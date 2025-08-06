@@ -88,6 +88,15 @@ public class RadioStation
             FileInfo leftFileInfo = TrackFolderDirectoryInfo.GetFiles().Where(x => x.Extension == ".wav" && x.Name.Contains("_left")).FirstOrDefault();
             FileInfo rightFileInfo = TrackFolderDirectoryInfo.GetFiles().Where(x => x.Extension == ".wav" && x.Name.Contains("_right")).FirstOrDefault();
 
+            //FileInfo existingOAC = DirectoryInfo.GetFiles().Where(x => x.Name.Contains(trackDir + ".oac") && x.Extension == ".xml").FirstOrDefault();
+            //int trackIDToUse = TrackID;
+            //if(existingOAC != null)
+            //{
+
+            //}
+
+
+
             RadioTrack radioTrack = new RadioTrack(leftFileInfo, rightFileInfo, TrackID, DirectoryInfo);
             radioTrack.Process();
             RadioTracks.Add(radioTrack);

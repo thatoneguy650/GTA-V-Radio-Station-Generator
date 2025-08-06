@@ -155,8 +155,10 @@ namespace GTA_V_Radio_Station_Generator
                 }
             }
             Helper.SerializeParams(toWrite, StoredStationsPath);
-
+            RadioStationsGenerator.PrintStationPlayList();
         }
+
+ 
         private void PopulateGrid()
         {
             dgvRadioStations.Rows.Clear();

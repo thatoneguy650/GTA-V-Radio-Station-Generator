@@ -111,8 +111,8 @@ public class RadioStationsGenerator
                 string title = tfile.Tag.Title;
                 string artist = tfile.Tag.AlbumArtists.FirstOrDefault();
 
-
-
+                radioTrack.FormalTrackName = tfile.Tag.Title;
+                radioTrack.FormalTrackArtist = artist;
 
 
                 WriteText($"{GetFullHash(radioTrack.TrackID + "a")} = {artist}", TrackIDFile);
@@ -156,6 +156,20 @@ public class RadioStationsGenerator
         sb.Append(TextToLog + System.Environment.NewLine);
         File.AppendAllText(OutputFilePath, sb.ToString());
         sb.Clear();
+    }
+    public void PrintStationPlayList()
+    {
+        string playlistsFile = StationFolderDirectory + "\\Playlists.txt";
+        File.WriteAllText(playlistsFile, "");
+        foreach (RadioStation radioStation in RadioStationList)
+        {
+            WriteText(radioStation.TextName, playlistsFile);
+            foreach(RadioTrack radioTrack in radioStation.RadioTracks)
+            {
+                WriteText("     " + radioTrack.FormalTrackArtist + " - " + radioTrack.FormalTrackName, playlistsFile);
+            }
+            WriteText("", playlistsFile);
+        }
     }
 
     private void CreateDat151File()

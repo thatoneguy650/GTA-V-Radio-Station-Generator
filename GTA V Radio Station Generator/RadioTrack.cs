@@ -49,6 +49,11 @@ public class RadioTrack
     public string RightFileName { get; private set; }
     public string RightFileNameWithExtension { get; private set; }
 
+
+
+    public string FormalTrackName { get; set; }
+    public string FormalTrackArtist { get;set; }
+
     public void Process()
     {
         //CreateMonoChannels(OriginalFileInfo.FullName);
